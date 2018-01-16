@@ -1,0 +1,13 @@
+5c0b7f60dfa71c3e855831df7892245f *DESCRIPTION
+4e52493833c790b7b17001fd7153c7ff *NAMESPACE
+ae35ce2d9be9e249ec5afde7bcfd6c61 *NEWS.md
+470d944039d2b9bf6e57639f7b221cfe *R/search-functions.R
+bdd89e8a94a6fe9cdb5eed8507157e3d *R/searcher-package.R
+f9cd1610ce23074c079fd93339569b9e *R/utilities.R
+8e129f59ccb0c9cc955a1f5d69072e57 *README.md
+82bfd5c93ef0301d59a8cc1b4887d4c0 *inst/docs/searcher_example.gif
+58ff6ef320db312a3563a0f7217e9b1f *man/search_site.Rd
+87684c4b7e541dcb9aa4165d438d096e *man/searcher-package.Rd
+8b16683ee547851a0369cddf100c1054 *man/searcher.Rd
+0471e819afe60896c35c580b0edac40d *tests/testthat.R
+7545d7571abb67100c94cc60e9aaca07 *tests/testthat/test-searcher.R
