@@ -28,6 +28,9 @@
 #' # Search DuckDuckGo
 #' search_duckduckgo("R language")
 #'
+#' # Search ixquick
+#' search_ixquick("RStudio IDE")
+#'
 #' # Search StackOverflow for Convolutions in the r tag
 #' search_stackoverflow("convolutions")
 #'
@@ -59,7 +62,8 @@ search_site = function(query,
                          "duckduckgo",
                          "ddg",
                          "bitbucket",
-                         "bb"
+                         "bb",
+                         "ixquick"
                        ),
                        rlang = TRUE) {
   site = tolower(site)
@@ -67,7 +71,7 @@ search_site = function(query,
 
   switch(
     site,
-    google         = search_google(query),
+    google         = search_google(query, rlang),
     stackoverflow  = ,
     # empty case carried below
     so             = search_stackoverflow(query, rlang),
@@ -77,11 +81,11 @@ search_site = function(query,
     bitbucket      = ,
     # empty case carried below
     bb             = search_bitbucket(query, rlang),
-    bing           = search_bing(query),
+    bing           = search_bing(query, rlang),
     duckduckgo     = ,
     # empty case carried below
-    ddg            = search_duckduckgo(query),
-    search_google(query)
+    ddg            = search_duckduckgo(query, rlang),
+    ixquick        = search_ixquick(query, rlang)
   )
 }
 
@@ -122,13 +126,17 @@ searcher = function(site  = c(
   "duckduckgo",
   "stackoverflow",
   "github",
-  "bitbucket"
+  "bitbucket",
+  "ixquick"
 ),
 rlang = TRUE) {
-  function(query = geterrmessage()) {
+  function(query = geterrmessage(), rlang = rlang) {
     search_site(query, site, rlang = rlang)
   }
 }
+
+
+########################### Start Search Engines
 
 #' @rdname search_site
 #' @export
@@ -138,11 +146,13 @@ rlang = TRUE) {
 #'
 #' See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
 #' for details.
-search_google = function(query = geterrmessage()) {
+search_google = function(query = geterrmessage(), rlang = TRUE) {
   if (!valid_query(query)) {
     message("Please provide only 1 `query` term that is not empty.")
     return(invisible(""))
   }
+
+  query = append_r_suffix(query, rlang = rlang)
 
   browse_url("https://google.com/search?q=", query)
 }
@@ -152,11 +162,13 @@ search_google = function(query = geterrmessage()) {
 #' @section Bing Search:
 #' The `search_bing()` function searches [Bing](https://bing.com) using:
 #' `https://bing.com/search?q=<query>`
-search_bing = function(query = geterrmessage()) {
+search_bing = function(query = geterrmessage(), rlang = TRUE) {
   if (!valid_query(query)) {
     message("Please provide only 1 `query` term that is not empty.")
     return(invisible(""))
   }
+
+  query = append_r_suffix(query, rlang = rlang)
 
   browse_url("https://bing.com/search?q=", query)
 }
@@ -166,11 +178,13 @@ search_bing = function(query = geterrmessage()) {
 #' @section DuckDuckGo Search:
 #' The `search_duckduckgo()` and `search_ddg()` functions both search
 #' [DuckDuckGo](https://duckduckgo.com) using: `https://duckduckgo.com/?q=<query>`
-search_duckduckgo = function(query = geterrmessage()) {
+search_duckduckgo = function(query = geterrmessage(), rlang = TRUE) {
   if (!valid_query(query)) {
     message("Please provide only 1 `query` term that is not empty.")
     return(invisible(""))
   }
+
+  query = append_r_suffix(query, rlang = rlang)
 
   browse_url("https://duckduckgo.com/?q=", query)
 }
@@ -178,6 +192,33 @@ search_duckduckgo = function(query = geterrmessage()) {
 #' @rdname search_site
 #' @export
 search_ddg = search_duckduckgo
+
+
+#' @rdname search_site
+#' @export
+#' @section ixquick Search:
+#' The `search_ixquick()` function searches
+#' [ixquick](https://ixquick.com) using:
+#'  \code{https://ixquick.com/do/dsearch?query=<query>}
+#'
+#' For additional details regarding [ixquick](https://ixquick.com)'s
+#' search interface please see:
+#'  \url{https://support.ixquick.com/index.php?/Knowledgebase/Article/View/201/0/how-do-i-make-startpage-by-ixquick-my-default-search-engine-in-chrome}
+search_ixquick = function(query = geterrmessage(), rlang = TRUE) {
+  if (!valid_query(query)) {
+    message("Please provide only 1 `query` term that is not empty.")
+    return(invisible(""))
+  }
+
+  query = append_r_suffix(query, rlang = rlang)
+
+  browse_url("https://ixquick.com/do/dsearch?query=", query)
+}
+
+########################### End Search Engines
+
+
+########################### Start Search Code Repos
 
 #' @rdname search_site
 #' @export
@@ -195,10 +236,8 @@ search_stackoverflow = function(query = geterrmessage(), rlang = TRUE) {
     return(invisible(""))
   }
 
-  query = if (rlang)
-    paste(query, "[r]")
-  else
-    query
+  query = append_r_suffix(query, rlang = rlang, "[r]")
+
   browse_url("https://stackoverflow.com/search?q=", query)
 }
 
@@ -223,10 +262,7 @@ search_github = function(query = geterrmessage(), rlang = TRUE) {
     return(invisible(""))
   }
 
-  query = if (rlang)
-    paste(query, "language:r type:issue")
-  else
-    query
+  query = append_r_suffix(query, rlang = rlang, "language:r type:issue")
 
   browse_url("https://github.com/search?q=", query, "&type=Issues")
 }
@@ -252,13 +288,13 @@ search_bitbucket = function(query = geterrmessage(), rlang = TRUE) {
     return(invisible(""))
   }
 
-  query = if (rlang)
-    paste(query, "lang:r")
-  else
-    query
+  query = append_r_suffix(query, rlang = rlang, "lang:r")
+
   browse_url("https://bitbucket.com/search?q=", query)
 }
 
 #' @rdname search_site
 #' @export
 search_bb = search_bitbucket
+
+########################### End Search Code Repos

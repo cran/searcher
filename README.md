@@ -20,10 +20,20 @@ call.
 
 ## Installation
 
-The `searcher` package is only available on GitHub for the moment. You
-can install the `searcher` package with:
+The `searcher` package is available on both CRAN and GitHub. The CRAN
+version is considered stable while the GitHub version is in a state of
+development and may break. You can install the stable version of the
+`searcher` package with:
 
 ``` r
+install.packages("searcher")
+```
+
+For the development version, you can opt for:
+
+``` r
+install.packages("devtools")
+
 devtools::install_github("coatless/searcher")
 ```
 
@@ -37,13 +47,17 @@ library(searcher)
 
 The `search_*()` functions can be used to search a query directly from
 *R* on major search engines, code repositories, and help websites. The
-following search platforms are supported: Google, Bing, DuckDuckGo,
-StackOverflow, GitHub, and BitBucket.
+following search platforms are supported: Google, Bing, ixquick,
+DuckDuckGo, StackOverflow, GitHub, and BitBucket. By default, an
+appropriate suffix for each platform that ensures relevant results to
+*R* is appended to all queries. This behavior can be disabled by using
+`rlang = FALSE`.
 
 ``` r
 # Searching R project on major search engines
 search_google("R project")
 search_bing("R project")
+search_ixquick("R project")
 search_duckduckgo("R project")                           # or search_ddg(...)
 
 # Searching for linear regression questions for R and in general
