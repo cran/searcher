@@ -3,18 +3,20 @@
 #' Creates an appropriate query string for a search engine and then opens
 #' up the resulting page in a web browser.
 #'
-#' @param site  Name of site to search on. Supported options:
-#'              `"google"` (default), `"stackoverflow"`, `"github"`, `"bing"`,
-#'              `"bitbucket"`
-#' @param query Contents of string to search. Default is the error message.
-#' @param rlang Search for results written in R. Default is `TRUE`
+#' @param site   Name of site to search on. Supported options:
+#'               `"google"` (default), `"bing"`, `"duckduckgo"`, `"startpage"`,
+#'               `"stackoverflow"`, `"rstudio community"`, `"github"`, and
+#'               `"bitbucket"`.
+#' @param query  Contents of string to search. Default is the error message.
+#' @param rlang  Search for results written in R. Default is `TRUE`
 #'
 #' @return The generated search URL or an empty string.
 #'
 #' @rdname search_site
 #' @export
-#' @seealso [search_google()], [search_stackoverflow()], [search_github()],
-#'          [search_bing()], [search_bitbucket()], [searcher()]
+#' @seealso [search_google()], [search_bing()], [search_duckduckgo()],
+#'          [search_startpage()], [search_stackoverflow()], [search_rstudio_community()],
+#'          [search_github()], [search_bitbucket()], and [searcher()]
 #' @examples
 #' # Search in a generic way
 #' search_site("r-project", "google")
@@ -28,14 +30,17 @@
 #' # Search DuckDuckGo
 #' search_duckduckgo("R language")
 #'
-#' # Search ixquick
-#' search_ixquick("RStudio IDE")
+#' # Search startpage
+#' search_startpage("RStudio IDE")
 #'
 #' # Search StackOverflow for Convolutions in the r tag
 #' search_stackoverflow("convolutions")
 #'
 #' # Search all languages on StackOverflow for convolutions
 #' search_stackoverflow("convolutions", rlang = FALSE)
+#'
+#' # Search RStudio Community
+#' search_rstudio_community("RStudio IDE")
 #'
 #' # Search GitHub Issues for bivariate normal in the language:r
 #' search_github("bivariate normal")
@@ -55,15 +60,18 @@ search_site = function(query,
                        site = c(
                          "google",
                          "bing",
-                         "stackoverflow",
-                         "so",
-                         "github",
-                         "gh",
                          "duckduckgo",
                          "ddg",
+                         "startpage",
+                         "sp",
+                         "stackoverflow",
+                         "so",
+                         "rstudio community",
+                         "rscom",
+                         "github",
+                         "gh",
                          "bitbucket",
-                         "bb",
-                         "ixquick"
+                         "bb"
                        ),
                        rlang = TRUE) {
   site = tolower(site)
@@ -72,20 +80,19 @@ search_site = function(query,
   switch(
     site,
     google         = search_google(query, rlang),
-    stackoverflow  = ,
-    # empty case carried below
-    so             = search_stackoverflow(query, rlang),
-    github         = ,
-    # empty case carried below
-    gh             = search_github(query, rlang),
-    bitbucket      = ,
-    # empty case carried below
-    bb             = search_bitbucket(query, rlang),
     bing           = search_bing(query, rlang),
-    duckduckgo     = ,
-    # empty case carried below
+    duckduckgo     = ,       # empty case carried below
     ddg            = search_duckduckgo(query, rlang),
-    ixquick        = search_ixquick(query, rlang)
+    startpage      = ,      # empty case carried below
+    sp             = search_startpage(query, rlang),
+    stackoverflow  = ,      # empty case carried below
+    so             = search_stackoverflow(query, rlang),
+    `rstudio community` = , # empty case carried below
+    rscom          = search_rstudio_community(query, rlang),
+    github         = ,      # empty case carried below
+    gh             = search_github(query, rlang),
+    bitbucket      = ,      # empty case carried below
+    bb             = search_bitbucket(query, rlang)
   )
 }
 
@@ -119,15 +126,18 @@ search_site = function(query,
 searcher = function(site  = c(
   "google",
   "bing",
-  "ddg",
-  "so",
-  "gh",
-  "bb",
   "duckduckgo",
+  "ddg",
+  "startpage",
+  "sp",
   "stackoverflow",
+  "so",
+  "rstudio community",
+  "rscom",
   "github",
+  "gh",
   "bitbucket",
-  "ixquick"
+  "bb"
 ),
 rlang = TRUE) {
   function(query = geterrmessage(), rlang = rlang) {
@@ -196,15 +206,21 @@ search_ddg = search_duckduckgo
 
 #' @rdname search_site
 #' @export
-#' @section ixquick Search:
-#' The `search_ixquick()` function searches
-#' [ixquick](https://ixquick.com) using:
-#'  \code{https://ixquick.com/do/dsearch?query=<query>}
-#'
-#' For additional details regarding [ixquick](https://ixquick.com)'s
-#' search interface please see:
-#'  \url{https://support.ixquick.com/index.php?/Knowledgebase/Article/View/201/0/how-do-i-make-startpage-by-ixquick-my-default-search-engine-in-chrome}
 search_ixquick = function(query = geterrmessage(), rlang = TRUE) {
+  .Defunct(msg = "ixquick is now startpage, please use `search_startpage()`.")
+}
+
+#' @rdname search_site
+#' @export
+#' @section Startpage Search:
+#' The `search_startpage()` function searches
+#' [startpage](https://startpage.com) using:
+#'  \code{https://startpage.com/do/dsearch?query=<query>}
+#'
+#' For additional details regarding [startpage](https://startpage.com)'s
+#' search interface please see:
+#'  \url{https://support.startpage.com/index.php?/Knowledgebase/Article/View/1261/0/add-familystartpagecom-as-the-default-search-engine-in-chrome}
+search_startpage = function(query = geterrmessage(), rlang = TRUE) {
   if (!valid_query(query)) {
     message("Please provide only 1 `query` term that is not empty.")
     return(invisible(""))
@@ -212,13 +228,17 @@ search_ixquick = function(query = geterrmessage(), rlang = TRUE) {
 
   query = append_r_suffix(query, rlang = rlang)
 
-  browse_url("https://ixquick.com/do/dsearch?query=", query)
+  browse_url("https://startpage.com/do/dsearch?query=", query)
 }
+
+#' @rdname search_site
+#' @export
+search_sp = search_startpage
 
 ########################### End Search Engines
 
 
-########################### Start Search Code Repos
+########################### Start Search Development Community Websites
 
 #' @rdname search_site
 #' @export
@@ -247,6 +267,36 @@ search_so = search_stackoverflow
 
 #' @rdname search_site
 #' @export
+#' @section RStudio Community Search:
+#' The `search_rstudio_community()` and `search_rscom()` functions both search
+#' [RStudio Community](https://community.rstudio.com/) using:
+#' \code{https://community.rstudio.com/search?q=<query>}
+#'
+#' For additional details regarding [RStudio Community](https://community.rstudio.com/)'s
+#' search interface please see the [Discourse](https://discourse.org) API documentation:
+#'  \url{https://docs.discourse.org/#tag/Search}
+search_rstudio_community = function(query = geterrmessage(), rlang = TRUE) {
+  if (!valid_query(query)) {
+    message("Please provide only 1 `query` term that is not empty.")
+    return(invisible(""))
+  }
+
+  # Disable using a query check
+  # query = append_r_suffix(query, rlang = rlang, "[r]")
+
+  browse_url("https://community.rstudio.com/search?q=", query)
+}
+
+#' @rdname search_site
+#' @export
+search_rscom = search_rstudio_community
+
+########################### End Search Development Community Websites
+
+########################### Start Search Code Repos
+
+#' @rdname search_site
+#' @export
 #' @section GitHub Search:
 #' The `search_github()` and `search_gh()` functions both search
 #' [GitHub](https://github.com) using:
@@ -270,7 +320,6 @@ search_github = function(query = geterrmessage(), rlang = TRUE) {
 #' @rdname search_site
 #' @export
 search_gh = search_github
-
 
 #' @rdname search_site
 #' @export

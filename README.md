@@ -1,29 +1,39 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-[![Travis-CI Build
-Status](https://travis-ci.org/coatless/searcher.svg?branch=master)](https://travis-ci.org/coatless/searcher)[![CRAN
-RStudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/searcher)](http://www.r-pkg.org/pkg/searcher)[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/searcher)](https://cran.r-project.org/package=searcher)[![Coverage
-Status](https://img.shields.io/codecov/c/github/coatless/searcher/master.svg)](https://codecov.io/github/coatless/searcher?branch=master)
-
 # searcher
 
-The goal of `searcher` is to provide a search interface directly inside
-of *R*. For example, within *R*, there is now the ability to look up
-`rcpp example numeric vector` or `ggplot2 fix axis labels` without
-having to open a browser, go to a search site, and type the query. By
-default, the search functions automatically search the last error on
-call.
+<!-- badges: start -->
 
-![](https://media.giphy.com/media/3o7528ih541CTYa6OY/giphy.gif)
+[![Travis-CI Build
+Status](https://travis-ci.org/r-assist/searcher.svg?branch=master)](https://travis-ci.org/r-assist/searcher)
+[![CRAN RStudio mirror
+downloads](http://cranlogs.r-pkg.org/badges/searcher)](http://www.r-pkg.org/pkg/searcher)
+[![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/searcher)](https://cran.r-project.org/package=searcher)
+[![Codecov test
+coverage](https://codecov.io/gh/r-assist/searcher/branch/master/graph/badge.svg)](https://codecov.io/gh/r-assist/searcher?branch=master)
+<!-- badges: end -->
+
+The goal of `searcher` is to provide a search interface directly inside
+of *R*. For example, to look up `rcpp example numeric vector` or
+`ggplot2 fix axis labels` call one of the `search_*()` functions to
+automatically have a web browser open, go to a search site, and type the
+query. By default, the search functions will attempt to search the last
+error on call if no query is specified.
+
+![](https://i.imgur.com/Zq2rg6G.gif)
 
 ## Installation
 
-The `searcher` package is available on both CRAN and GitHub. The CRAN
-version is considered stable while the GitHub version is in a state of
-development and may break. You can install the stable version of the
-`searcher` package with:
+The `searcher` package is available on both
+[CRAN](https://CRAN.R-project.org/package=searcher) and
+[GitHub](https://github.com/r-assist/searcher). The
+[CRAN](https://CRAN.R-project.org/package=searcher) version is
+considered stable while the
+[GitHub](https://github.com/r-assist/searcher) version is in a state of
+development and may break.
+
+You can install the stable version of the `searcher` package with:
 
 ``` r
 install.packages("searcher")
@@ -32,9 +42,8 @@ install.packages("searcher")
 For the development version, you can opt for:
 
 ``` r
-install.packages("devtools")
-
-devtools::install_github("coatless/searcher")
+if(!requireNamespace("devtools")) { install.packages("devtools") }
+devtools::install_github("r-assist/searcher")
 ```
 
 ## Usage
@@ -46,23 +55,33 @@ library(searcher)
 ## Search Terms
 
 The `search_*()` functions can be used to search a query directly from
-*R* on major search engines, code repositories, and help websites. The
-following search platforms are supported: Google, Bing, ixquick,
-DuckDuckGo, StackOverflow, GitHub, and BitBucket. By default, an
-appropriate suffix for each platform that ensures relevant results to
-*R* is appended to all queries. This behavior can be disabled by using
-`rlang = FALSE`.
+*R* on major search engines, programming help websites, and code
+repositories. The following search platforms are supported:
+[Google](https://google.com), [Bing](https://www.bing.com/),
+[DuckDuckGo](https://duckduckgo.com/),
+[Startpage](https://www.startpage.com/en/),
+[StackOverflow](https://stackoverflow.com/search), [RStudio
+Community](https://community.rstudio.com/search),
+[GitHub](https://github.com/search), and
+[BitBucket](https://bitbucket.com/search). By default, an appropriate
+suffix for each platform that ensures relevant results to *R* is
+appended to all queries. This behavior can be disabled by using `rlang =
+FALSE`.
 
 ``` r
 # Searching R project on major search engines
 search_google("R project")
 search_bing("R project")
-search_ixquick("R project")
 search_duckduckgo("R project")                           # or search_ddg(...)
+search_startpage("R project")                            # or search_sp(...)
 
 # Searching for linear regression questions for R and in general
 search_stackoverflow("linear regression")
 search_stackoverflow("linear regression", rlang = FALSE) # or search_so(...)
+
+# Searching RStudio Community for tips
+search_rstudio_community("tips")
+search_rstudio_community("tips", rlang = FALSE)          # or search_rscom(...)
 
 # Searching GitHub Issues for maps in R and other languages
 search_github("maps")
@@ -78,7 +97,7 @@ search_bitbucket("assertions", rlang = FALSE)            # or search_bb(...)
 `searcher` offers preliminary support for automatically or manually
 searching errors that are generated in *R*. For more robust error search
 support and to also search warning messages, please use the
-[`errorist`](https://github.com/coatless/errorist) package.
+[`errorist`](https://github.com/r-assist/errorist) package.
 
 ### Automatically
 
@@ -108,13 +127,15 @@ search portal.
 ``` r
 search_google()
 search_bing()
-search_duckduckgo()    # or search_ddg()
-search_stackoverflow() # or search_so()
-search_github()        # or search_gh()
-search_bitbucket()     # or search_bb()
+search_duckduckgo()        # or search_ddg()
+search_startpage()         # or search_sp()
+search_stackoverflow()     # or search_so()
+search_rstudio_community() # or search_rscom()
+search_github()            # or search_gh()
+search_bitbucket()         # or search_bb()
 ```
 
-# Motivation
+## Motivation
 
 The idea for `searcher` began as a project to automatically search
 errors and warnings that occurred while working with *R* after a
@@ -129,11 +150,11 @@ an off-site user premade database. Both of these options were focused
 solely on querying *R* documentation made available by packages. Given
 the nature of errors generally being *undocumented*, neither of these
 approaches could be used. Thus, `searcher` was unintentionally born to
-provide a means for [`errorist`](https://github.com/coatless/errorist),
+provide a means for [`errorist`](https://github.com/r-assist/errorist),
 which contains a robust way to automatically searching errors and
 warnings.
 
-# Special Thanks
+### Special Thanks
 
   - [Dirk Eddelbuettel](http://dirk.eddelbuettel.com) for starting the
     discussion on [XKCD Comic 1185: Ineffective
@@ -141,6 +162,34 @@ warnings.
   - [Barry Rowlingson](http://barry.rowlingson.com) for remarks about
     functionality.
 
-# License
+### Publicity
+
+On the [`#rstats`-twitter
+verse](https://twitter.com/search?q=%23rstats), `searcher` has been
+positively received by community members.
+
+> R package “searcher” that automatically searches Stackoverflow for
+> error that you just saw in the console. Cool package, especially for
+> those who learn R :) <https://github.com/coatless/searcher> … \#r
+> \#rlang \#rstats \#rstudio
+> 
+> — [Paweł
+> Przytuła](https://twitter.com/pawel_appsilon/status/1109545516264841216)
+> March 23th, 2019. \~292 Retweets and 876 likes
+
+> Did you know, using “searcher” package, you could automatically to
+> search stackoverflow, google, GitHub and many more sites for errors,
+> packages or topics. \#rstats
+> 
+> — [Shakirah Nakalungi](https://twitter.com/cynthia_kyra) June 29th,
+> 2019, when she was [Rotating Curator for the “We are R-Ladies” twitter
+> account](https://twitter.com/WeAreRLadies/status/1144921174251581440).
+> \~144 Retweets and 544 likes
+
+Please let us know via an [issue
+ticket](https://github.com/r-assist/searcher/issues/new) about how you
+are using `searcher`.
+
+## License
 
 GPL (\>= 2)

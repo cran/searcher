@@ -38,16 +38,16 @@ test_that("Check link generation", {
     "https://duckduckgo.com/?q=toad"
   )
 
-  ##### ixquick
+  ##### startpage
 
   expect_identical(
-    search_ixquick("toad"),
-    "https://ixquick.com/do/dsearch?query=toad%20r%20programming"
+    search_startpage("toad"),
+    "https://startpage.com/do/dsearch?query=toad%20r%20programming"
   )
 
   expect_identical(
-    search_ixquick("toad", rlang = FALSE),
-    "https://ixquick.com/do/dsearch?query=toad"
+    search_startpage("toad", rlang = FALSE),
+    "https://startpage.com/do/dsearch?query=toad"
   )
 
   ##### StackOverflow
@@ -60,6 +60,18 @@ test_that("Check link generation", {
   expect_identical(
     search_stackoverflow("toad", rlang = FALSE),
     "https://stackoverflow.com/search?q=toad"
+  )
+
+  ##### RStudio Community
+
+  expect_identical(
+    search_rscom("toad"),
+    "https://community.rstudio.com/search?q=toad"
+  )
+
+  expect_identical(
+    search_rscom("toad", rlang = FALSE),
+    "https://community.rstudio.com/search?q=toad"
   )
 
   ##### GitHub
@@ -100,8 +112,8 @@ test_that("Validate selection", {
   )
 
   expect_identical(
-    search_site("toad", "ixquick", rlang = FALSE),
-    "https://ixquick.com/do/dsearch?query=toad"
+    search_site("toad", "startpage", rlang = FALSE),
+    "https://startpage.com/do/dsearch?query=toad"
   )
 
   expect_identical(
@@ -161,13 +173,20 @@ test_that("Malformed search query validation", {
   )
 
   expect_identical(
-    search_ixquick(""),
+    search_sp(""),
     "",
     "Empty string check if no error messages"
   )
 
   expect_identical(
     search_so(""),
+    "",
+    "Empty string check if no error messages"
+  )
+
+
+  expect_identical(
+    search_rscom(""),
     "",
     "Empty string check if no error messages"
   )
