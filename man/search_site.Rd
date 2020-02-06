@@ -9,19 +9,24 @@
 \alias{search_ixquick}
 \alias{search_startpage}
 \alias{search_sp}
-\alias{search_stackoverflow}
-\alias{search_so}
 \alias{search_rstudio_community}
 \alias{search_rscom}
+\alias{search_twitter}
+\alias{search_stackoverflow}
+\alias{search_so}
 \alias{search_github}
 \alias{search_gh}
 \alias{search_bitbucket}
 \alias{search_bb}
 \title{Search a Query on a Search Portal in a Web Browser}
 \usage{
-search_site(query, site = c("google", "bing", "duckduckgo", "ddg",
-  "startpage", "sp", "stackoverflow", "so", "rstudio community", "rscom",
-  "github", "gh", "bitbucket", "bb"), rlang = TRUE)
+search_site(
+  query,
+  site = c("google", "bing", "duckduckgo", "ddg", "startpage", "sp",
+    "rstudio community", "rscom", "twitter", "stackoverflow", "so", "github", "gh",
+    "bitbucket", "bb"),
+  rlang = TRUE
+)
 
 search_google(query = geterrmessage(), rlang = TRUE)
 
@@ -37,13 +42,15 @@ search_startpage(query = geterrmessage(), rlang = TRUE)
 
 search_sp(query = geterrmessage(), rlang = TRUE)
 
-search_stackoverflow(query = geterrmessage(), rlang = TRUE)
-
-search_so(query = geterrmessage(), rlang = TRUE)
-
 search_rstudio_community(query = geterrmessage(), rlang = TRUE)
 
 search_rscom(query = geterrmessage(), rlang = TRUE)
+
+search_twitter(query = geterrmessage(), rlang = TRUE)
+
+search_stackoverflow(query = geterrmessage(), rlang = TRUE)
+
+search_so(query = geterrmessage(), rlang = TRUE)
 
 search_github(query = geterrmessage(), rlang = TRUE)
 
@@ -58,8 +65,8 @@ search_bb(query = geterrmessage(), rlang = TRUE)
 
 \item{site}{Name of site to search on. Supported options:
 \code{"google"} (default), \code{"bing"}, \code{"duckduckgo"}, \code{"startpage"},
-\code{"stackoverflow"}, \code{"rstudio community"}, \code{"github"}, and
-\code{"bitbucket"}.}
+\code{"rstudio community"}, \code{"twitter"},\code{"stackoverflow"},
+\code{"github"}, and \code{"bitbucket"}.}
 
 \item{rlang}{Search for results written in R. Default is \code{TRUE}}
 }
@@ -73,7 +80,7 @@ up the resulting page in a web browser.
 \section{Google Search}{
 
 The \code{search_google} function searches \href{https://google.com}{Google} using:
-\code{https://google.com/search?q=<query>}
+\verb{https://google.com/search?q=<query>}
 
 See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
 for details.
@@ -82,13 +89,13 @@ for details.
 \section{Bing Search}{
 
 The \code{search_bing()} function searches \href{https://bing.com}{Bing} using:
-\code{https://bing.com/search?q=<query>}
+\verb{https://bing.com/search?q=<query>}
 }
 
 \section{DuckDuckGo Search}{
 
 The \code{search_duckduckgo()} and \code{search_ddg()} functions both search
-\href{https://duckduckgo.com}{DuckDuckGo} using: \code{https://duckduckgo.com/?q=<query>}
+\href{https://duckduckgo.com}{DuckDuckGo} using: \verb{https://duckduckgo.com/?q=<query>}
 }
 
 \section{Startpage Search}{
@@ -102,17 +109,6 @@ search interface please see:
 \url{https://support.startpage.com/index.php?/Knowledgebase/Article/View/1261/0/add-familystartpagecom-as-the-default-search-engine-in-chrome}
 }
 
-\section{StackOverflow Search}{
-
-The \code{search_stackoverflow()} and \code{search_so()} functions both search
-\href{https://stackoverflow.com}{StackOverflow} using:
-\code{https://stackoverflow.com/search?q=\%5Br\%5D+<query>}
-
-For additional details regarding \href{https://stackoverflow.com}{StackOverflow}'s
-search interface please see:
-\url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
-}
-
 \section{RStudio Community Search}{
 
 The \code{search_rstudio_community()} and \code{search_rscom()} functions both search
@@ -122,6 +118,28 @@ The \code{search_rstudio_community()} and \code{search_rscom()} functions both s
 For additional details regarding \href{https://community.rstudio.com/}{RStudio Community}'s
 search interface please see the \href{https://discourse.org}{Discourse} API documentation:
 \url{https://docs.discourse.org/#tag/Search}
+}
+
+\section{Twitter Search}{
+
+The \code{search_twitter()} functions search
+\href{https://twitter.com/}{Twitter} using:
+\code{https://twitter.com/search?q=<query>}
+
+For additional details regarding \href{https://twitter.com/}{Twitter}'s
+search interface please see:
+\url{https://help.twitter.com/en/using-twitter/twitter-advanced-search}
+}
+
+\section{StackOverflow Search}{
+
+The \code{search_stackoverflow()} and \code{search_so()} functions both search
+\href{https://stackoverflow.com}{StackOverflow} using:
+\code{https://stackoverflow.com/search?q=\%5Br\%5D+<query>}
+
+For additional details regarding \href{https://stackoverflow.com}{StackOverflow}'s
+search interface please see:
+\url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
 }
 
 \section{GitHub Search}{
@@ -161,16 +179,19 @@ search_bing("Microsoft R")
 search_duckduckgo("R language")
 
 # Search startpage
-search_startpage("RStudio IDE")
+search_startpage("VS Code")
+
+# Search RStudio Community
+search_rstudio_community("RStudio IDE")
+
+# Search Twitter
+search_twitter("searcher")
 
 # Search StackOverflow for Convolutions in the r tag
 search_stackoverflow("convolutions")
 
 # Search all languages on StackOverflow for convolutions
 search_stackoverflow("convolutions", rlang = FALSE)
-
-# Search RStudio Community
-search_rstudio_community("RStudio IDE")
 
 # Search GitHub Issues for bivariate normal in the language:r
 search_github("bivariate normal")
@@ -189,6 +210,7 @@ options(error = search_google)
 }
 \seealso{
 \code{\link[=search_google]{search_google()}}, \code{\link[=search_bing]{search_bing()}}, \code{\link[=search_duckduckgo]{search_duckduckgo()}},
-\code{\link[=search_startpage]{search_startpage()}}, \code{\link[=search_stackoverflow]{search_stackoverflow()}}, \code{\link[=search_rstudio_community]{search_rstudio_community()}},
-\code{\link[=search_github]{search_github()}}, \code{\link[=search_bitbucket]{search_bitbucket()}}, and \code{\link[=searcher]{searcher()}}
+\code{\link[=search_startpage]{search_startpage()}}, \code{\link[=search_twitter]{search_twitter()}}, \code{\link[=search_rstudio_community]{search_rstudio_community()}},
+\code{\link[=search_stackoverflow]{search_stackoverflow()}}, \code{\link[=search_github]{search_github()}}, \code{\link[=search_bitbucket]{search_bitbucket()}},
+and \code{\link[=searcher]{searcher()}}
 }

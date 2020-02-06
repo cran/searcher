@@ -5,18 +5,19 @@
 #'
 #' @param site   Name of site to search on. Supported options:
 #'               `"google"` (default), `"bing"`, `"duckduckgo"`, `"startpage"`,
-#'               `"stackoverflow"`, `"rstudio community"`, `"github"`, and
-#'               `"bitbucket"`.
-#' @param query  Contents of string to search. Default is the error message.
-#' @param rlang  Search for results written in R. Default is `TRUE`
+#'               `"rstudio community"`, `"twitter"`,`"stackoverflow"`,
+#'               `"github"`, and `"bitbucket"`.
+#' @param query   Contents of string to search. Default is the error message.
+#' @param rlang   Search for results written in R. Default is `TRUE`
 #'
 #' @return The generated search URL or an empty string.
 #'
 #' @rdname search_site
 #' @export
 #' @seealso [search_google()], [search_bing()], [search_duckduckgo()],
-#'          [search_startpage()], [search_stackoverflow()], [search_rstudio_community()],
-#'          [search_github()], [search_bitbucket()], and [searcher()]
+#'          [search_startpage()], [search_twitter()], [search_rstudio_community()],
+#'          [search_stackoverflow()], [search_github()], [search_bitbucket()],
+#'          and [searcher()]
 #' @examples
 #' # Search in a generic way
 #' search_site("r-project", "google")
@@ -31,16 +32,19 @@
 #' search_duckduckgo("R language")
 #'
 #' # Search startpage
-#' search_startpage("RStudio IDE")
+#' search_startpage("VS Code")
+#'
+#' # Search RStudio Community
+#' search_rstudio_community("RStudio IDE")
+#'
+#' # Search Twitter
+#' search_twitter("searcher")
 #'
 #' # Search StackOverflow for Convolutions in the r tag
 #' search_stackoverflow("convolutions")
 #'
 #' # Search all languages on StackOverflow for convolutions
 #' search_stackoverflow("convolutions", rlang = FALSE)
-#'
-#' # Search RStudio Community
-#' search_rstudio_community("RStudio IDE")
 #'
 #' # Search GitHub Issues for bivariate normal in the language:r
 #' search_github("bivariate normal")
@@ -64,10 +68,11 @@ search_site = function(query,
                          "ddg",
                          "startpage",
                          "sp",
-                         "stackoverflow",
-                         "so",
                          "rstudio community",
                          "rscom",
+                         "twitter",
+                         "stackoverflow",
+                         "so",
                          "github",
                          "gh",
                          "bitbucket",
@@ -85,10 +90,11 @@ search_site = function(query,
     ddg            = search_duckduckgo(query, rlang),
     startpage      = ,      # empty case carried below
     sp             = search_startpage(query, rlang),
-    stackoverflow  = ,      # empty case carried below
-    so             = search_stackoverflow(query, rlang),
     `rstudio community` = , # empty case carried below
     rscom          = search_rstudio_community(query, rlang),
+    twitter        = search_twitter(query, rlang),
+    stackoverflow  = ,      # empty case carried below
+    so             = search_stackoverflow(query, rlang),
     github         = ,      # empty case carried below
     gh             = search_github(query, rlang),
     bitbucket      = ,      # empty case carried below
@@ -102,6 +108,7 @@ search_site = function(query,
 #' R error message on search portals by opening a
 #' browser.
 #'
+#' @param keyword Opt to search under different default terms.
 #' @inheritParams search_site
 #' @export
 #' @section Generic Error Search:
@@ -123,28 +130,22 @@ search_site = function(query,
 #' # On error, automatically search the message on google
 #' options(error = searcher("google"))
 #' }
-searcher = function(site  = c(
-  "google",
-  "bing",
-  "duckduckgo",
-  "ddg",
-  "startpage",
-  "sp",
-  "stackoverflow",
-  "so",
-  "rstudio community",
-  "rscom",
-  "github",
-  "gh",
-  "bitbucket",
-  "bb"
-),
-rlang = TRUE) {
-  function(query = geterrmessage(), rlang = rlang) {
-    search_site(query, site, rlang = rlang)
+searcher = function(site, keyword = getOption("searcher.default_keyword")) {
+
+  entry = site_details(site)
+
+  function(query = geterrmessage(), rlang = TRUE) {
+
+    if (!valid_query(query)) {
+      message("`query` must contain only 1 element that is not empty.")
+      return(invisible(""))
+    }
+
+    query = append_search_term_suffix(query, rlang, entry[["keywords"]][[keyword]])
+
+    browse_url(entry$site_url, query, entry$suffix)
   }
 }
-
 
 ########################### Start Search Engines
 
@@ -156,48 +157,21 @@ rlang = TRUE) {
 #'
 #' See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
 #' for details.
-search_google = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang)
-
-  browse_url("https://google.com/search?q=", query)
-}
+search_google = searcher("google")
 
 #' @rdname search_site
 #' @export
 #' @section Bing Search:
 #' The `search_bing()` function searches [Bing](https://bing.com) using:
 #' `https://bing.com/search?q=<query>`
-search_bing = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang)
-
-  browse_url("https://bing.com/search?q=", query)
-}
+search_bing = searcher("bing")
 
 #' @rdname search_site
 #' @export
 #' @section DuckDuckGo Search:
 #' The `search_duckduckgo()` and `search_ddg()` functions both search
 #' [DuckDuckGo](https://duckduckgo.com) using: `https://duckduckgo.com/?q=<query>`
-search_duckduckgo = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang)
-
-  browse_url("https://duckduckgo.com/?q=", query)
-}
+search_duckduckgo = searcher("ddg")
 
 #' @rdname search_site
 #' @export
@@ -220,16 +194,7 @@ search_ixquick = function(query = geterrmessage(), rlang = TRUE) {
 #' For additional details regarding [startpage](https://startpage.com)'s
 #' search interface please see:
 #'  \url{https://support.startpage.com/index.php?/Knowledgebase/Article/View/1261/0/add-familystartpagecom-as-the-default-search-engine-in-chrome}
-search_startpage = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang)
-
-  browse_url("https://startpage.com/do/dsearch?query=", query)
-}
+search_startpage = searcher("sp")
 
 #' @rdname search_site
 #' @export
@@ -240,30 +205,6 @@ search_sp = search_startpage
 
 ########################### Start Search Development Community Websites
 
-#' @rdname search_site
-#' @export
-#' @section StackOverflow Search:
-#' The `search_stackoverflow()` and `search_so()` functions both search
-#' [StackOverflow](https://stackoverflow.com) using:
-#' \code{https://stackoverflow.com/search?q=\%5Br\%5D+<query>}
-#'
-#' For additional details regarding [StackOverflow](https://stackoverflow.com)'s
-#' search interface please see:
-#'  \url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
-search_stackoverflow = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang, "[r]")
-
-  browse_url("https://stackoverflow.com/search?q=", query)
-}
-
-#' @rdname search_site
-#' @export
-search_so = search_stackoverflow
 
 #' @rdname search_site
 #' @export
@@ -275,21 +216,39 @@ search_so = search_stackoverflow
 #' For additional details regarding [RStudio Community](https://community.rstudio.com/)'s
 #' search interface please see the [Discourse](https://discourse.org) API documentation:
 #'  \url{https://docs.discourse.org/#tag/Search}
-search_rstudio_community = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  # Disable using a query check
-  # query = append_r_suffix(query, rlang = rlang, "[r]")
-
-  browse_url("https://community.rstudio.com/search?q=", query)
-}
+search_rstudio_community = searcher("rscom")
 
 #' @rdname search_site
 #' @export
 search_rscom = search_rstudio_community
+
+#' @rdname search_site
+#' @export
+#' @section Twitter Search:
+#' The `search_twitter()` functions search
+#' [Twitter](https://twitter.com/) using:
+#' \code{https://twitter.com/search?q=<query>}
+#'
+#' For additional details regarding [Twitter](https://twitter.com/)'s
+#' search interface please see:
+#' \url{https://help.twitter.com/en/using-twitter/twitter-advanced-search}
+search_twitter = searcher("twitter")
+
+#' @rdname search_site
+#' @export
+#' @section StackOverflow Search:
+#' The `search_stackoverflow()` and `search_so()` functions both search
+#' [StackOverflow](https://stackoverflow.com) using:
+#' \code{https://stackoverflow.com/search?q=\%5Br\%5D+<query>}
+#'
+#' For additional details regarding [StackOverflow](https://stackoverflow.com)'s
+#' search interface please see:
+#'  \url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
+search_stackoverflow = searcher("so")
+
+#' @rdname search_site
+#' @export
+search_so = search_stackoverflow
 
 ########################### End Search Development Community Websites
 
@@ -306,16 +265,7 @@ search_rscom = search_rstudio_community
 #' search interface please see:
 #' \url{https://help.github.com/categories/searching-for-information-on-github/}
 #' and \url{https://help.github.com/articles/searching-code/}
-search_github = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang, "language:r type:issue")
-
-  browse_url("https://github.com/search?q=", query, "&type=Issues")
-}
+search_github = searcher("gh")
 
 #' @rdname search_site
 #' @export
@@ -331,16 +281,7 @@ search_gh = search_github
 #' For additional details regarding [BitBucket](https://bitbucket.com)'s
 #' search interface please see:
 #'  \url{https://confluence.atlassian.com/bitbucket/code-search-in-bitbucket-873876782.html}
-search_bitbucket = function(query = geterrmessage(), rlang = TRUE) {
-  if (!valid_query(query)) {
-    message("Please provide only 1 `query` term that is not empty.")
-    return(invisible(""))
-  }
-
-  query = append_r_suffix(query, rlang = rlang, "lang:r")
-
-  browse_url("https://bitbucket.com/search?q=", query)
-}
+search_bitbucket = searcher("bb")
 
 #' @rdname search_site
 #' @export

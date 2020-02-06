@@ -5,8 +5,8 @@
 
 <!-- badges: start -->
 
-[![Travis-CI Build
-Status](https://travis-ci.org/r-assist/searcher.svg?branch=master)](https://travis-ci.org/r-assist/searcher)
+[![R build
+status](https://github.com/r-assist/searcher/workflows/R-CMD-check/badge.svg)](https://github.com/r-assist/searcher/actions)
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/searcher)](http://www.r-pkg.org/pkg/searcher)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/searcher)](https://cran.r-project.org/package=searcher)
@@ -60,6 +60,7 @@ repositories. The following search platforms are supported:
 [Google](https://google.com), [Bing](https://www.bing.com/),
 [DuckDuckGo](https://duckduckgo.com/),
 [Startpage](https://www.startpage.com/en/),
+[Twitter](https://twitter.com/search),
 [StackOverflow](https://stackoverflow.com/search), [RStudio
 Community](https://community.rstudio.com/search),
 [GitHub](https://github.com/search), and
@@ -74,6 +75,10 @@ search_google("R project")
 search_bing("R project")
 search_duckduckgo("R project")                           # or search_ddg(...)
 search_startpage("R project")                            # or search_sp(...)
+
+# Searching Twitter to find out about machine learning for R and in general
+search_twitter("machine learning")
+search_twitter("machine learning", rlang = FALSE)
 
 # Searching for linear regression questions for R and in general
 search_stackoverflow("linear regression")
@@ -127,12 +132,49 @@ search portal.
 ``` r
 search_google()
 search_bing()
+search_twitter()
 search_duckduckgo()        # or search_ddg()
 search_startpage()         # or search_sp()
 search_stackoverflow()     # or search_so()
 search_rstudio_community() # or search_rscom()
 search_github()            # or search_gh()
 search_bitbucket()         # or search_bb()
+```
+
+## Package Customizations
+
+The ability to customize different operations in `searcher` is possible
+by setting values in
+[`options()`](https://stat.ethz.ch/R-manual/R-patched/RHOME/library/base/html/options.html)
+within
+[`~/.Rprofile`](https://stat.ethz.ch/R-manual/R-patched/library/base/html/Startup.html).
+Presently, the following options are available:
+
+  - `searcher.launch_delay`: Amount of time between launching the web
+    browser from when the command was issued. Default is `0.5` seconds.
+  - `searcher.use_rstudio_viewer`: Display search results in the RStudio
+    viewer pane instead of a web browser. Default is `FALSE`.
+  - `searcher.default_keyword`: Suffix keyword to focus search results
+    between either `"base"` or `"tidyverse"`. Default is `"base"`.
+
+To set one of these options, please create the `.Rprofile` by typing
+into *R*:
+
+``` r
+file.edit("~/.Rprofile")
+```
+
+From there, add:
+
+``` r
+.First = function() {
+  options(
+    searcher.launch_delay       = 0,
+    searcher.use_rstudio_viewer = FALSE,
+    searcher.default_keyword    = "tidyverse"
+    ## Additional options.
+  )
+}
 ```
 
 ## Motivation

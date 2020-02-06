@@ -7,13 +7,26 @@
 \title{searcher: Query Search Interfaces}
 \description{
 Provides a search interface to look up terms
-    on 'Google', 'Bing', 'DuckDuckGo', 'Startpage', 'StackOverflow', 
+    on 'Google', 'Bing', 'DuckDuckGo', 'Startpage', 'Twitter', 'StackOverflow', 
     'RStudio Community', 'GitHub', and 'BitBucket'. Upon searching, a browser 
     window will open with the aforementioned search results.
 }
-\details{
-Provides an interface to search engines via R.
+\section{Package Customizations}{
+
+
+\code{searcher} accesses a set of default values stored in \code{\link[=options]{options()}} on each
+call to keep the function signatures small. By default, these options are given as:
+\itemize{
+\item \code{searcher.launch_delay}: Amount of time to remain in \emph{R} before opening
+a browser window. Default is \code{0.5} seconds.
+\item \code{searcher.use_rstudio_viewer}: Display search results in the RStudio
+viewer pane instead of a web browser. Default is \code{FALSE}.
+\item \code{searcher.default_keyword}: Suffix keyword to generate accurate results
+between either \code{"base"} or \code{"tidyverse"}. Default is \code{"base"}.
+\item ...
 }
+}
+
 \seealso{
 Useful links:
 \itemize{
@@ -23,6 +36,6 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: James Balamuta \email{balamut2@illinois.edu} (0000-0003-2826-8458)
+\strong{Maintainer}: James Balamuta \email{balamut2@illinois.edu} (\href{https://orcid.org/0000-0003-2826-8458}{ORCID})
 
 }

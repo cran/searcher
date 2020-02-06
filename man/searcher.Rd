@@ -4,17 +4,15 @@
 \alias{searcher}
 \title{Generate a Searcher function for use with Error Handling}
 \usage{
-searcher(site = c("google", "bing", "duckduckgo", "ddg", "startpage",
-  "sp", "stackoverflow", "so", "rstudio community", "rscom", "github",
-  "gh", "bitbucket", "bb"), rlang = TRUE)
+searcher(site, keyword = getOption("searcher.default_keyword"))
 }
 \arguments{
 \item{site}{Name of site to search on. Supported options:
 \code{"google"} (default), \code{"bing"}, \code{"duckduckgo"}, \code{"startpage"},
-\code{"stackoverflow"}, \code{"rstudio community"}, \code{"github"}, and
-\code{"bitbucket"}.}
+\code{"rstudio community"}, \code{"twitter"},\code{"stackoverflow"},
+\code{"github"}, and \code{"bitbucket"}.}
 
-\item{rlang}{Search for results written in R. Default is \code{TRUE}}
+\item{keyword}{Opt to search under different default terms.}
 }
 \description{
 Constructs a function object that will search the last
