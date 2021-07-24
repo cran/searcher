@@ -47,6 +47,7 @@ site_index =
     site_entry("bing", "https://bing.com/search?q="),
     site_entry("duckduckgo", "https://duckduckgo.com/?q=", "ddg"),
     site_entry("startpage", "https://startpage.com/do/dsearch?query=", "sp"),
+    site_entry("ecosia", "https://www.ecosia.org/search?q="),
     site_entry(
       "stackoverflow",
       "https://stackoverflow.com/search?q=",
@@ -76,6 +77,11 @@ site_index =
       "twitter",
       "https://twitter.com/search?q=",
       keywords = keyword_entry("%23rstats", "%23rstats %23tidyverse") # %23 is #
+    ),
+    site_entry(
+      "rseek",
+      "https://rseek.org/?q=",
+      keywords = keyword_entry("", "tidyverse")
     )
   )
 

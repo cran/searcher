@@ -15,9 +15,9 @@
 #' @rdname search_site
 #' @export
 #' @seealso [search_google()], [search_bing()], [search_duckduckgo()],
-#'          [search_startpage()], [search_twitter()], [search_rstudio_community()],
-#'          [search_stackoverflow()], [search_github()], [search_bitbucket()],
-#'          and [searcher()]
+#'          [search_startpage()], [search_rseek()], [search_twitter()],
+#'          [search_rstudio_community()], [search_stackoverflow()],
+#'          [search_github()], [search_bitbucket()], and [searcher()]
 #' @examples
 #' # Search in a generic way
 #' search_site("r-project", "google")
@@ -33,6 +33,9 @@
 #'
 #' # Search startpage
 #' search_startpage("VS Code")
+#'
+#' # Search Rseek
+#' search_rseek("searcher")
 #'
 #' # Search RStudio Community
 #' search_rstudio_community("RStudio IDE")
@@ -68,6 +71,7 @@ search_site = function(query,
                          "ddg",
                          "startpage",
                          "sp",
+                         "rseek",
                          "rstudio community",
                          "rscom",
                          "twitter",
@@ -90,6 +94,7 @@ search_site = function(query,
     ddg            = search_duckduckgo(query, rlang),
     startpage      = ,      # empty case carried below
     sp             = search_startpage(query, rlang),
+    rseek          = search_rseek(query, rlang),
     `rstudio community` = , # empty case carried below
     rscom          = search_rstudio_community(query, rlang),
     twitter        = search_twitter(query, rlang),
@@ -152,8 +157,8 @@ searcher = function(site, keyword = getOption("searcher.default_keyword")) {
 #' @rdname search_site
 #' @export
 #' @section Google Search:
-#' The `search_google` function searches [Google](https://google.com) using:
-#' `https://google.com/search?q=<query>`
+#' The `search_google` function searches [Google](https://www.google.com/) using:
+#' `https://www.google.com/search?q=<query>`
 #'
 #' See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
 #' for details.
@@ -162,8 +167,8 @@ search_google = searcher("google")
 #' @rdname search_site
 #' @export
 #' @section Bing Search:
-#' The `search_bing()` function searches [Bing](https://bing.com) using:
-#' `https://bing.com/search?q=<query>`
+#' The `search_bing()` function searches [Bing](https://www.bing.com/) using:
+#' `https://www.bing.com/search?q=<query>`
 search_bing = searcher("bing")
 
 #' @rdname search_site
@@ -199,6 +204,25 @@ search_startpage = searcher("sp")
 #' @rdname search_site
 #' @export
 search_sp = search_startpage
+
+#' @rdname search_site
+#' @export
+#' @section Ecosia Search:
+#' The `search_ecosia()` function searches
+#' Ecosia using:
+#'  \code{https://www.ecosia.org/search?q=<query>}
+#'
+#' For additional details regarding Ecosia's
+#' search interface please see:
+#'  \url{https://ecosia.zendesk.com/hc/en-us}
+search_ecosia = searcher("ecosia")
+
+#' @rdname search_site
+#' @export
+#' @section Rseek Search:
+#' The `search_rseek()` function searches [Rseek](https://rseek.org) using:
+#' `https://rseek.org/?q=<query>`
+search_rseek = searcher("rseek")
 
 ########################### End Search Engines
 
@@ -275,10 +299,10 @@ search_gh = search_github
 #' @export
 #' @section BitBucket Search:
 #' The `search_bitbucket()` and `search_bb()` functions both search
-#' [BitBucket](https://bitbucket.com) using:
-#'  \code{https://bitbucket.com/search?q=lang\%3Ar+<query>}
+#' [BitBucket](https://bitbucket.org) using:
+#'  \code{https://bitbucket.org/search?q=lang\%3Ar+<query>}
 #'
-#' For additional details regarding [BitBucket](https://bitbucket.com)'s
+#' For additional details regarding [BitBucket](https://bitbucket.org)'s
 #' search interface please see:
 #'  \url{https://confluence.atlassian.com/bitbucket/code-search-in-bitbucket-873876782.html}
 search_bitbucket = searcher("bb")

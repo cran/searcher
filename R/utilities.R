@@ -15,14 +15,14 @@
 #'
 #' @examples
 #' # Query Google
-#' browse_url("https://google.com/search?q=", "rstats is great")
+#' browse_url("https://www.google.com/search?q=", "rstats is great")
 #'
 #' # Generate URL for Google (do not open in a web browser)
-#' browse_url("https://google.com/search?q=", "rstats is great",
+#' browse_url("https://www.google.com/search?q=", "rstats is great",
 #'            open_browser = FALSE)
 #'
 #' # Print out the hidden url
-#' print(browse_url("https://google.com/search?q=", "rstats is great",
+#' print(browse_url("https://www.google.com/search?q=", "rstats is great",
 #'            open_browser = FALSE))
 #' @noRd
 browse_url = function(base,
@@ -111,7 +111,7 @@ valid_query = function(query) {
 #'
 #' @param query  Search terms to verify
 #' @param rlang  Append value to query.
-#' @param suffix Value to be added to search query. Default `r programming`.
+#' @param suffix Value to be added to search query. Default `"r programming"`.
 #'
 #' @return Query string returned as-is or modified with a suffix that
 #' ensure results are _R_ oriented.
