@@ -5,8 +5,8 @@
 #'
 #' @param site   Name of site to search on. Supported options:
 #'               `"google"` (default), `"bing"`, `"duckduckgo"`, `"startpage"`,
-#'               `"rstudio community"`, `"twitter"`,`"stackoverflow"`,
-#'               `"github"`, and `"bitbucket"`.
+#'               `"qwant"`,`"rstudio community"`, `"twitter"`,`"stackoverflow"`,
+#'               `"github"`, `"grep"`, and `"bitbucket"`.
 #' @param query   Contents of string to search. Default is the error message.
 #' @param rlang   Search for results written in R. Default is `TRUE`
 #'
@@ -15,9 +15,9 @@
 #' @rdname search_site
 #' @export
 #' @seealso [search_google()], [search_bing()], [search_duckduckgo()],
-#'          [search_startpage()], [search_rseek()], [search_twitter()],
+#'          [search_startpage()], [search_rseek()], [search_qwant()], [search_twitter()],
 #'          [search_rstudio_community()], [search_stackoverflow()],
-#'          [search_github()], [search_bitbucket()], and [searcher()]
+#'          [search_github()], [search_grep()], [search_bitbucket()], and [searcher()]
 #' @examples
 #' # Search in a generic way
 #' search_site("r-project", "google")
@@ -37,6 +37,9 @@
 #' # Search Rseek
 #' search_rseek("searcher")
 #'
+#' # Search Qwant
+#' search_qwant("Quarto")
+#'
 #' # Search RStudio Community
 #' search_rstudio_community("RStudio IDE")
 #'
@@ -55,6 +58,12 @@
 #' # Search all languages on GitHub Issues for bivariate normal
 #' search_github("bivariate normal", rlang = FALSE)
 #'
+#' # Search R code on GitHub for numerical optimization
+#' search_grep("optim")
+#'
+#' # Search all code on GitHub for numerical optimization
+#' search_grep("optim", rlang = FALSE)
+#'
 #' # Search BitBucket for assertions
 #' search_bitbucket("assertions")
 #'
@@ -71,6 +80,7 @@ search_site = function(query,
                          "ddg",
                          "startpage",
                          "sp",
+                         "qwant",
                          "rseek",
                          "rstudio community",
                          "rscom",
@@ -79,6 +89,7 @@ search_site = function(query,
                          "so",
                          "github",
                          "gh",
+                         "grep",
                          "bitbucket",
                          "bb"
                        ),
@@ -94,6 +105,7 @@ search_site = function(query,
     ddg            = search_duckduckgo(query, rlang),
     startpage      = ,      # empty case carried below
     sp             = search_startpage(query, rlang),
+    qwant          = search_qwant(query, rlang),
     rseek          = search_rseek(query, rlang),
     `rstudio community` = , # empty case carried below
     rscom          = search_rstudio_community(query, rlang),
@@ -102,6 +114,7 @@ search_site = function(query,
     so             = search_stackoverflow(query, rlang),
     github         = ,      # empty case carried below
     gh             = search_github(query, rlang),
+    grep           = search_grep(query, rlang),
     bitbucket      = ,      # empty case carried below
     bb             = search_bitbucket(query, rlang)
   )
@@ -160,7 +173,7 @@ searcher = function(site, keyword = getOption("searcher.default_keyword")) {
 #' The `search_google` function searches [Google](https://www.google.com/) using:
 #' `https://www.google.com/search?q=<query>`
 #'
-#' See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
+#' See \url{https://moz.com/learn/seo/search-operators}
 #' for details.
 search_google = searcher("google")
 
@@ -195,10 +208,6 @@ search_ixquick = function(query = geterrmessage(), rlang = TRUE) {
 #' The `search_startpage()` function searches
 #' [startpage](https://startpage.com) using:
 #'  \code{https://startpage.com/do/dsearch?query=<query>}
-#'
-#' For additional details regarding [startpage](https://startpage.com)'s
-#' search interface please see:
-#'  \url{https://support.startpage.com/index.php?/Knowledgebase/Article/View/1261/0/add-familystartpagecom-as-the-default-search-engine-in-chrome}
 search_startpage = searcher("sp")
 
 #' @rdname search_site
@@ -214,7 +223,7 @@ search_sp = search_startpage
 #'
 #' For additional details regarding Ecosia's
 #' search interface please see:
-#'  \url{https://ecosia.zendesk.com/hc/en-us}
+#'  \url{https://ecosia.helpscoutdocs.com/article/502-ecosia-on-desktop}
 search_ecosia = searcher("ecosia")
 
 #' @rdname search_site
@@ -223,6 +232,13 @@ search_ecosia = searcher("ecosia")
 #' The `search_rseek()` function searches [Rseek](https://rseek.org) using:
 #' `https://rseek.org/?q=<query>`
 search_rseek = searcher("rseek")
+
+#' @rdname search_site
+#' @export
+#' @section Qwant Search:
+#' The `search_qwant()` function searches
+#' Qwant using: `https://www.qwant.com/?q=<query>`
+search_qwant = searcher("qwant")
 
 ########################### End Search Engines
 
@@ -250,12 +266,12 @@ search_rscom = search_rstudio_community
 #' @export
 #' @section Twitter Search:
 #' The `search_twitter()` functions search
-#' [Twitter](https://twitter.com/) using:
+#' Twitter using:
 #' \code{https://twitter.com/search?q=<query>}
 #'
-#' For additional details regarding [Twitter](https://twitter.com/)'s
+#' For additional details regarding Twitter's
 #' search interface please see:
-#' \url{https://help.twitter.com/en/using-twitter/twitter-advanced-search}
+#' `https://help.twitter.com/en/using-x/x-advanced-search`
 search_twitter = searcher("twitter")
 
 #' @rdname search_site
@@ -267,7 +283,7 @@ search_twitter = searcher("twitter")
 #'
 #' For additional details regarding [StackOverflow](https://stackoverflow.com)'s
 #' search interface please see:
-#'  \url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
+#'  `https://stackoverflow.com/help/searching`
 search_stackoverflow = searcher("so")
 
 #' @rdname search_site
@@ -287,13 +303,21 @@ search_so = search_stackoverflow
 #'
 #' For additional details regarding [GitHub](https://github.com)'s
 #' search interface please see:
-#' \url{https://help.github.com/categories/searching-for-information-on-github/}
-#' and \url{https://help.github.com/articles/searching-code/}
+#' <https://docs.github.com/en/enterprise-cloud@latest/search-github/getting-started-with-searching-on-github/about-searching-on-github>
+#' and <https://docs.github.com/en/search-github/searching-on-github/searching-code/>
 search_github = searcher("gh")
 
 #' @rdname search_site
 #' @export
 search_gh = search_github
+
+#' @rdname search_site
+#' @export
+#' @section grep.app Search:
+#' The `search_grep()` function searches all public code on
+#' [GitHub](https://github.com) using [grep.app](https://grep.app) by
+#' querying: `https://grep.app/search?q=<query-here>&filter[lang][0]=R`
+search_grep = searcher("grep")
 
 #' @rdname search_site
 #' @export

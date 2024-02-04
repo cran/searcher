@@ -11,6 +11,7 @@
 \alias{search_sp}
 \alias{search_ecosia}
 \alias{search_rseek}
+\alias{search_qwant}
 \alias{search_rstudio_community}
 \alias{search_rscom}
 \alias{search_twitter}
@@ -18,15 +19,16 @@
 \alias{search_so}
 \alias{search_github}
 \alias{search_gh}
+\alias{search_grep}
 \alias{search_bitbucket}
 \alias{search_bb}
 \title{Search a Query on a Search Portal in a Web Browser}
 \usage{
 search_site(
   query,
-  site = c("google", "bing", "duckduckgo", "ddg", "startpage", "sp", "rseek",
+  site = c("google", "bing", "duckduckgo", "ddg", "startpage", "sp", "qwant", "rseek",
     "rstudio community", "rscom", "twitter", "stackoverflow", "so", "github", "gh",
-    "bitbucket", "bb"),
+    "grep", "bitbucket", "bb"),
   rlang = TRUE
 )
 
@@ -48,6 +50,8 @@ search_ecosia(query = geterrmessage(), rlang = TRUE)
 
 search_rseek(query = geterrmessage(), rlang = TRUE)
 
+search_qwant(query = geterrmessage(), rlang = TRUE)
+
 search_rstudio_community(query = geterrmessage(), rlang = TRUE)
 
 search_rscom(query = geterrmessage(), rlang = TRUE)
@@ -62,6 +66,8 @@ search_github(query = geterrmessage(), rlang = TRUE)
 
 search_gh(query = geterrmessage(), rlang = TRUE)
 
+search_grep(query = geterrmessage(), rlang = TRUE)
+
 search_bitbucket(query = geterrmessage(), rlang = TRUE)
 
 search_bb(query = geterrmessage(), rlang = TRUE)
@@ -71,8 +77,8 @@ search_bb(query = geterrmessage(), rlang = TRUE)
 
 \item{site}{Name of site to search on. Supported options:
 \code{"google"} (default), \code{"bing"}, \code{"duckduckgo"}, \code{"startpage"},
-\code{"rstudio community"}, \code{"twitter"},\code{"stackoverflow"},
-\code{"github"}, and \code{"bitbucket"}.}
+\code{"qwant"},\code{"rstudio community"}, \code{"twitter"},\code{"stackoverflow"},
+\code{"github"}, \code{"grep"}, and \code{"bitbucket"}.}
 
 \item{rlang}{Search for results written in R. Default is \code{TRUE}}
 }
@@ -88,7 +94,7 @@ up the resulting page in a web browser.
 The \code{search_google} function searches \href{https://www.google.com/}{Google} using:
 \verb{https://www.google.com/search?q=<query>}
 
-See \url{https://moz.com/blog/the-ultimate-guide-to-the-google-search-parameters}
+See \url{https://moz.com/learn/seo/search-operators}
 for details.
 }
 
@@ -109,10 +115,6 @@ The \code{search_duckduckgo()} and \code{search_ddg()} functions both search
 The \code{search_startpage()} function searches
 \href{https://startpage.com}{startpage} using:
 \code{https://startpage.com/do/dsearch?query=<query>}
-
-For additional details regarding \href{https://startpage.com}{startpage}'s
-search interface please see:
-\url{https://support.startpage.com/index.php?/Knowledgebase/Article/View/1261/0/add-familystartpagecom-as-the-default-search-engine-in-chrome}
 }
 
 \section{Ecosia Search}{
@@ -123,13 +125,19 @@ Ecosia using:
 
 For additional details regarding Ecosia's
 search interface please see:
-\url{https://ecosia.zendesk.com/hc/en-us}
+\url{https://ecosia.helpscoutdocs.com/article/502-ecosia-on-desktop}
 }
 
 \section{Rseek Search}{
 
 The \code{search_rseek()} function searches \href{https://rseek.org}{Rseek} using:
 \verb{https://rseek.org/?q=<query>}
+}
+
+\section{Qwant Search}{
+
+The \code{search_qwant()} function searches
+Qwant using: \verb{https://www.qwant.com/?q=<query>}
 }
 
 \section{RStudio Community Search}{
@@ -146,12 +154,12 @@ search interface please see the \href{https://discourse.org}{Discourse} API docu
 \section{Twitter Search}{
 
 The \code{search_twitter()} functions search
-\href{https://twitter.com/}{Twitter} using:
+Twitter using:
 \code{https://twitter.com/search?q=<query>}
 
-For additional details regarding \href{https://twitter.com/}{Twitter}'s
+For additional details regarding Twitter's
 search interface please see:
-\url{https://help.twitter.com/en/using-twitter/twitter-advanced-search}
+\verb{https://help.twitter.com/en/using-x/x-advanced-search}
 }
 
 \section{StackOverflow Search}{
@@ -162,7 +170,7 @@ The \code{search_stackoverflow()} and \code{search_so()} functions both search
 
 For additional details regarding \href{https://stackoverflow.com}{StackOverflow}'s
 search interface please see:
-\url{https://stackoverflow.com/help/advanced-search-parameters-jobs}
+\verb{https://stackoverflow.com/help/searching}
 }
 
 \section{GitHub Search}{
@@ -173,8 +181,15 @@ The \code{search_github()} and \code{search_gh()} functions both search
 
 For additional details regarding \href{https://github.com}{GitHub}'s
 search interface please see:
-\url{https://help.github.com/categories/searching-for-information-on-github/}
-and \url{https://help.github.com/articles/searching-code/}
+\url{https://docs.github.com/en/enterprise-cloud@latest/search-github/getting-started-with-searching-on-github/about-searching-on-github}
+and \url{https://docs.github.com/en/search-github/searching-on-github/searching-code/}
+}
+
+\section{grep.app Search}{
+
+The \code{search_grep()} function searches all public code on
+\href{https://github.com}{GitHub} using \href{https://grep.app}{grep.app} by
+querying: \verb{https://grep.app/search?q=<query-here>&filter[lang][0]=R}
 }
 
 \section{BitBucket Search}{
@@ -207,6 +222,9 @@ search_startpage("VS Code")
 # Search Rseek
 search_rseek("searcher")
 
+# Search Qwant
+search_qwant("Quarto")
+
 # Search RStudio Community
 search_rstudio_community("RStudio IDE")
 
@@ -225,6 +243,12 @@ search_github("bivariate normal")
 # Search all languages on GitHub Issues for bivariate normal
 search_github("bivariate normal", rlang = FALSE)
 
+# Search R code on GitHub for numerical optimization
+search_grep("optim")
+
+# Search all code on GitHub for numerical optimization
+search_grep("optim", rlang = FALSE)
+
 # Search BitBucket for assertions
 search_bitbucket("assertions")
 
@@ -236,7 +260,7 @@ options(error = search_google)
 }
 \seealso{
 \code{\link[=search_google]{search_google()}}, \code{\link[=search_bing]{search_bing()}}, \code{\link[=search_duckduckgo]{search_duckduckgo()}},
-\code{\link[=search_startpage]{search_startpage()}}, \code{\link[=search_rseek]{search_rseek()}}, \code{\link[=search_twitter]{search_twitter()}},
+\code{\link[=search_startpage]{search_startpage()}}, \code{\link[=search_rseek]{search_rseek()}}, \code{\link[=search_qwant]{search_qwant()}}, \code{\link[=search_twitter]{search_twitter()}},
 \code{\link[=search_rstudio_community]{search_rstudio_community()}}, \code{\link[=search_stackoverflow]{search_stackoverflow()}},
-\code{\link[=search_github]{search_github()}}, \code{\link[=search_bitbucket]{search_bitbucket()}}, and \code{\link[=searcher]{searcher()}}
+\code{\link[=search_github]{search_github()}}, \code{\link[=search_grep]{search_grep()}}, \code{\link[=search_bitbucket]{search_bitbucket()}}, and \code{\link[=searcher]{searcher()}}
 }

@@ -3,14 +3,9 @@
 \docType{package}
 \name{searcher-package}
 \alias{searcher-package}
-\alias{_PACKAGE}
 \title{searcher: Query Search Interfaces}
 \description{
-Provides a search interface to look up terms
-    on 'Google', 'Bing', 'DuckDuckGo', 'Startpage', 'Ecosia', 'rseek',
-    'Twitter', 'StackOverflow', 'RStudio Community', 'GitHub', and 'BitBucket'.
-    Upon searching, a browser window will open with the aforementioned search
-    results.
+Provides a search interface to look up terms on 'Google', 'Bing', 'DuckDuckGo', 'Startpage', 'Ecosia', 'rseek', 'Twitter', 'StackOverflow', 'RStudio Community', 'GitHub', and 'BitBucket'. Upon searching, a browser window will open with the aforementioned search results.
 }
 \section{Package Customizations}{
 
@@ -31,8 +26,9 @@ between either \code{"base"} or \code{"tidyverse"}. Default is \code{"base"}.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://github.com/r-assist/searcher}
-  \item Report bugs at \url{https://github.com/r-assist/searcher/issues}
+  \item \url{https://github.com/coatless-rpkg/searcher}
+  \item \url{https://r-pkg.thecoatlessprofessor.com/searcher/}
+  \item Report bugs at \url{https://github.com/coatless-rpkg/searcher/issues}
 }
 
 }
